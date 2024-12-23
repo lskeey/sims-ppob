@@ -20,7 +20,7 @@ const DashboardHeader = () => {
         <div className="w-12 aspect-square rounded-full overflow-hidden border mb-2">
           <img
             className="w-full h-full object-cover"
-            src="./public/assets/Profile Photo.png"
+            src="/assets/Profile Photo.png"
             alt="Profile Photo"
           />
         </div>
