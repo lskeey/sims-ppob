@@ -95,7 +95,7 @@ const Profile = () => {
               <div className="w-24 aspect-square rounded-full overflow-hidden border">
                 <img
                   className="w-full h-full object-cover"
-                  src="./src/assets/Profile Photo.png"
+                  src="./public/assets/Profile Photo.png"
                   alt="Profile Photo"
                 />
               </div>

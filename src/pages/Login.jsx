@@ -29,8 +29,19 @@ const Login = () => {
   }, [navigate, userInfo])
   
   const submitForm = (data) => {
-    dispatch(loginUser(data));
-    navigate("/")
+    dispatch(loginUser(data))
+    .unwrap()
+    .then(() => {
+      navigate("/")
+    })
+    .catch(() => {
+      Swal.fire({
+        text: "Login gagal!",
+        icon: "error",
+        confirmButtonColor: "#ef4444",
+        confirmButtonText: "Kembali"
+      });
+    });
   };
 
   return (
@@ -39,7 +50,7 @@ const Login = () => {
         <div className='flex flex-col justify-center items-center space-y-6'>
 
           <div className='flex items-center space-x-2'>
-            <img className='w-6' src='./src/assets/Logo.png' alt='Logo' />
+            <img className='w-6' src='./public/assets/Logo.png' alt='Logo' />
             <div className='text-lg font-semibold'>SIMS PPOB</div>
           </div>
           <div className='w-2/3 text-center text-xl font-semibold'>Lengkapi data untuk membuat akun</div>
@@ -130,7 +141,7 @@ const Login = () => {
         </div>
       </div>
       <div className='w-full'>
-        <img className='w-full h-full object-cover' src='./src/assets/Illustrasi Login.png' alt='Illustrasi Login' />
+        <img className='w-full h-full object-cover' src='./public/assets/Illustrasi Login.png' alt='Illustrasi Login' />
       </div>
     </div>
   );

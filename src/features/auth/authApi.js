@@ -1,18 +1,11 @@
-import axios from 'axios'
 import { createAsyncThunk } from '@reduxjs/toolkit'
-
-const API_URL = 'https://take-home-test-api.nutech-integrasi.com'
-
-const axiosInstance = axios.create({
-  baseURL: API_URL,
-  headers: { 'Content-Type': 'application/json' },
-});
+import apiClient from "../../api/client"
 
 export const registerUser = createAsyncThunk(
   'auth/register',
   async ({ email, first_name, last_name, password }, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.post('/registration', {
+      const response = await apiClient.post('/registration', {
         email,
         first_name,
         last_name,
@@ -34,7 +27,7 @@ export const loginUser = createAsyncThunk(
   'auth/login',
   async ({ email, password }, { rejectWithValue }) => {
     try {
-      const { data } = await axiosInstance.post('/login', {
+      const { data } = await apiClient.post('/login', {
         email,
         password,
       });
