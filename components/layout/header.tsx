@@ -32,6 +32,7 @@ export default function Header() {
           <SheetContent side="top" className="py-6 lg:hidden">
             <SheetHeader hidden>
               <SheetTitle hidden>Navigation Menu</SheetTitle>
+              <SheetDescription hidden>Navigation Menu</SheetDescription>
             </SheetHeader>
             <NavMenu className="grid flex-1 auto-rows-min px-6 text-center" />
           </SheetContent>
