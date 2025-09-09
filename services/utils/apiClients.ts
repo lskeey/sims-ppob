@@ -4,7 +4,19 @@ import Cookies from "js-cookie";
 const BASE_URL = "https://take-home-test-api.nutech-integrasi.com";
 
 function getAuthToken(): string | null {
-  return Cookies.get("auth_token") || null;
+  const cookieValue = Cookies.get("auth-token");
+
+  if (cookieValue) {
+    try {
+      const authObject = JSON.parse(cookieValue);
+      return authObject.state.token || null;
+    } catch (error) {
+      console.error("Failed to parse auth cookie:", error);
+      return null;
+    }
+  }
+
+  return null;
 }
 
 export async function apiFetch<T>(
