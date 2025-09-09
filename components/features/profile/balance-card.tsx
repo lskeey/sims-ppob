@@ -1,12 +1,15 @@
+"use client";
+
+import { formatNumber } from "@/lib/utils";
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 
 export default function BalanceCard() {
-  const [showBalance, setShowBalance] = useState<boolean>(false);
+  const [showBalance, setShowBalance] = useState<boolean>(true);
   const toggleBalance = (): void => {
     setShowBalance(!showBalance);
   };
-  const balance = <span className="text-3xl">1,000,000,000,000</span>;
+  const balance = <span className="text-3xl">{formatNumber(1000000000)}</span>;
   const hiddenBalance = (
     <span className="flex items-center gap-1.5 ml-2">
       {Array.from({ length: 6 }).map((_, index) => (

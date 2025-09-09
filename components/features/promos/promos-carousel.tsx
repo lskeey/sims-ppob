@@ -11,8 +11,8 @@ export default function PromosCarousel() {
         {promotions.map((promotion, i) => (
           <div key={i} className="w-56 flex-none">
             <Image
-              src={"/images/promos/" + promotion.src}
-              alt={promotion.name}
+              src={promotion.banner_image}
+              alt={promotion.banner_name}
               width={500}
               height={500}
               priority

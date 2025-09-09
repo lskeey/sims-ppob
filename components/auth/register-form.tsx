@@ -39,9 +39,9 @@ export function RegisterForm() {
           />
         </div>
         <div className="grid gap-3">
-          <Label htmlFor="firstName">First Name</Label>
+          <Label htmlFor="first_name">First Name</Label>
           <Input
-            id="firstName"
+            id="first_name"
             type="text"
             placeholder="John"
             className="rounded-xs capitalize"
@@ -49,9 +49,9 @@ export function RegisterForm() {
           />
         </div>
         <div className="grid gap-3">
-          <Label htmlFor="lastName">Last Name</Label>
+          <Label htmlFor="last_name">Last Name</Label>
           <Input
-            id="lastName"
+            id="last_name"
             type="text"
             placeholder="Doe"
             className="rounded-xs capitalize"

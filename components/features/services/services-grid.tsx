@@ -8,15 +8,17 @@ export default function ServicesGrid() {
         <div key={i} className="flex flex-col gap-2 w-12 items-center">
           <div className="w-full h-12 flex-none">
             <Image
-              src={"/images/" + service.src}
-              alt={service.name + "Icon"}
+              src={service.service_icon}
+              alt={service.service_name + "Icon"}
               width={500}
               height={500}
               className="object-cover object-center"
               priority
             />
           </div>
-          <span className="flex-1 text-xs text-center">{service.name}</span>
+          <span className="flex-1 text-xs text-center">
+            {service.service_name}
+          </span>
         </div>
       ))}
     </div>
