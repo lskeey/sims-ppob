@@ -1,15 +1,19 @@
 "use client";
 
 import { formatNumber } from "@/lib/utils";
+import { useBalanceStore } from "@/stores/balanceStore";
 import { Eye, EyeOff } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function BalanceCard() {
+  const { balance, fetchBalance, loading, error } = useBalanceStore();
   const [showBalance, setShowBalance] = useState<boolean>(true);
   const toggleBalance = (): void => {
     setShowBalance(!showBalance);
   };
-  const balance = <span className="text-3xl">{formatNumber(1000000000)}</span>;
+  const balanceDiv = (
+    <span className="text-3xl">{formatNumber(balance || 0)}</span>
+  );
   const hiddenBalance = (
     <span className="flex items-center gap-1.5 ml-2">
       {Array.from({ length: 6 }).map((_, index) => (
@@ -17,6 +21,10 @@ export default function BalanceCard() {
       ))}
     </span>
   );
+
+  useEffect(() => {
+    fetchBalance();
+  }, [fetchBalance]);
   return (
     <div className="flex flex-col justify-between h-32 text-background bg-red-500 p-3 lg:p-4 rounded-xl min-w-max">
       <div className="">
@@ -25,7 +33,7 @@ export default function BalanceCard() {
       <div className="">
         <p className="flex items-center font-semibold">
           <span className="text-lg">Rp</span>
-          {showBalance ? balance : hiddenBalance}
+          {showBalance ? balanceDiv : hiddenBalance}
         </p>
       </div>
       <div className="">

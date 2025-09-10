@@ -9,3 +9,7 @@ export interface UpdateProfileRequest {
   first_name: string;
   last_name: string;
 }
+
+export interface BalanceResponse {
+  balance: number;
+}

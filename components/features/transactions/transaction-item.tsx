@@ -1,8 +1,8 @@
-import { Transaction } from "@/data/transaction";
 import { formatDateToWIB, formatRupiah } from "@/lib/utils";
+import { TransactionResponse } from "@/services/transaction/types";
 
 interface TransactionsItemProps {
-  transaction: Transaction;
+  transaction: TransactionResponse;
 }
 
 export default function TransactionsItem({

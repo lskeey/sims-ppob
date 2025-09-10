@@ -1,7 +1,11 @@
 import { APIResponse } from "../../types/common";
 import { apiFetch } from "../utils/apiClients";
 import { updateProfileSchema } from "@/schemas";
-import { ProfileResponse, UpdateProfileRequest } from "./types";
+import {
+  BalanceResponse,
+  ProfileResponse,
+  UpdateProfileRequest,
+} from "./types";
 
 // Get user profile
 export async function getProfile(): Promise<APIResponse<ProfileResponse>> {
@@ -21,4 +25,9 @@ export async function updateProfile(
     },
     true
   );
+}
+
+// Get user balance
+export async function getBalance(): Promise<APIResponse<BalanceResponse>> {
+  return apiFetch<BalanceResponse>("/balance", { method: "GET" }, true);
 }

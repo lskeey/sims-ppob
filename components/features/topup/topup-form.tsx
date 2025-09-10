@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { formatNumber, formatRupiah } from "@/lib/utils";
+import { useTopupStore } from "@/stores/topupStore";
 import { useState } from "react";
 
 interface TopUpFormProps {
@@ -11,6 +12,7 @@ interface TopUpFormProps {
 }
 
 export default function TopUpForm({ onSubmit }: TopUpFormProps) {
+  const { topup, loading, error } = useTopupStore();
   const amounts = [10000, 20000, 50000, 100000, 250000, 500000];
   const [topUpAmount, setTopUpAmount] = useState<string>("");
   const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
@@ -34,14 +36,32 @@ export default function TopUpForm({ onSubmit }: TopUpFormProps) {
       setSelectedAmount(null);
     }
   };
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const amount = parseInt(topUpAmount, 10);
 
-    if (amount > 0) {
-      onSubmit?.(amount);
+    if (
+      window.confirm(
+        `Apakah Anda yakin ingin melakukan top up sebesar ${amount}?`
+      )
+    ) {
+      try {
+        await topup({ top_up_amount: amount });
+      } catch (err) {
+        const errorMessage =
+          err instanceof Error
+            ? err.message.includes("401")
+              ? "Unauthorized access. Please log in again."
+              : err.message
+            : "An unexpected error occurred. Please try again.";
+        console.log(errorMessage);
+        alert(errorMessage);
+      }
+    } else {
+      console.log("Top up dibatalkan.");
     }
   };
+
   return (
     <div className="min-w-max space-y-10">
       <div>
