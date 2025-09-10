@@ -4,15 +4,26 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { formatNumber, formatRupiah } from "@/lib/utils";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { useTopupStore } from "@/stores/topupStore";
 import { useState } from "react";
+import { IoMdWallet } from "react-icons/io";
+import { toast } from "sonner";
+import { useBalanceStore } from "@/stores/balanceStore";
 
-interface TopUpFormProps {
-  onSubmit?: (amount: number) => void;
-}
-
-export default function TopUpForm({ onSubmit }: TopUpFormProps) {
-  const { topup, loading, error } = useTopupStore();
+export default function TopUpForm() {
+  const { topup } = useTopupStore();
+  const { fetchBalance } = useBalanceStore();
   const amounts = [10000, 20000, 50000, 100000, 250000, 500000];
   const [topUpAmount, setTopUpAmount] = useState<string>("");
   const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
@@ -28,7 +39,6 @@ export default function TopUpForm({ onSubmit }: TopUpFormProps) {
     const value = event.target.value.replace(/[^0-9]/g, "");
     setTopUpAmount(value);
     setDisplayAmount(formatNumber(value));
-    // Reset selected amount if input doesn't match any preset amount
     const numericValue = parseInt(value, 10);
     if (amounts.includes(numericValue)) {
       setSelectedAmount(numericValue);
@@ -36,29 +46,27 @@ export default function TopUpForm({ onSubmit }: TopUpFormProps) {
       setSelectedAmount(null);
     }
   };
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const handleSubmit = async () => {
     const amount = parseInt(topUpAmount, 10);
 
-    if (
-      window.confirm(
-        `Apakah Anda yakin ingin melakukan top up sebesar ${amount}?`
-      )
-    ) {
-      try {
-        await topup({ top_up_amount: amount });
-      } catch (err) {
-        const errorMessage =
-          err instanceof Error
-            ? err.message.includes("401")
-              ? "Unauthorized access. Please log in again."
-              : err.message
-            : "An unexpected error occurred. Please try again.";
-        console.log(errorMessage);
-        alert(errorMessage);
-      }
-    } else {
-      console.log("Top up dibatalkan.");
+    try {
+      await topup({ top_up_amount: amount });
+      fetchBalance();
+      toast("Top-up successful.", {
+        style: {
+          backgroundColor: "#00bc7d",
+          color: "#fff",
+        },
+      });
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error
+          ? err.message.includes("401")
+            ? "Unauthorized access. Please log in again."
+            : err.message
+          : "An unexpected error occurred. Please try again.";
+      console.log(errorMessage);
+      alert(errorMessage);
     }
   };
 
@@ -89,7 +97,7 @@ export default function TopUpForm({ onSubmit }: TopUpFormProps) {
             </button>
           ))}
         </div>
-        <form className="w-full lg:w-8/12 lg:order-1" onSubmit={handleSubmit}>
+        <form className="w-full lg:w-8/12 lg:order-1">
           <div className="flex flex-col gap-4">
             <div>
               <Label htmlFor="top_up_amount" hidden>
@@ -105,13 +113,43 @@ export default function TopUpForm({ onSubmit }: TopUpFormProps) {
                 required
               />
             </div>
-            <Button
-              type="submit"
-              className="w-full rounded-sm bg-red-500 hover:bg-red-600 cursor-pointer"
-              disabled={!topUpAmount || parseInt(topUpAmount, 10) <= 0}
-            >
-              Top Up
-            </Button>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button
+                  className="w-full rounded-sm bg-red-500 hover:bg-red-600 cursor-pointer"
+                  disabled={!topUpAmount || parseInt(topUpAmount, 10) <= 0}
+                >
+                  Top Up
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent className="w-sm space-y-6">
+                <AlertDialogHeader>
+                  <div className="w-min self-center p-3 bg-red-500 rounded-full mb-4">
+                    <IoMdWallet className="self-center size-8 text-background" />
+                  </div>
+                  <AlertDialogTitle className="text-center">
+                    {"Top Up " + formatRupiah(selectedAmount || 0)}
+                    <AlertDialogDescription className="text-center">
+                      Are you sure you want to proceed? This is a final
+                      transaction.
+                    </AlertDialogDescription>
+                  </AlertDialogTitle>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <div className="flex gap-6">
+                    <AlertDialogCancel className="flex-1 cursor-pointer">
+                      Cancel
+                    </AlertDialogCancel>
+                    <AlertDialogAction
+                      className="flex-1 bg-red-500 hover:bg-red-600 cursor-pointer"
+                      onClick={handleSubmit}
+                    >
+                      Confirm
+                    </AlertDialogAction>
+                  </div>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
         </form>
       </div>
