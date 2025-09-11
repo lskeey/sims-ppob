@@ -9,7 +9,7 @@
   </p>
 
   <p align="center">
-    <img src="./public/images/screenshot/home-page.png" alt="Home Page" />
+    <img src="./public/images/mockup/sims-ppob.png" alt="Sims PPOB showcase" />
   </p>
 
   <p>Built with the following tools and technologies:</p>
