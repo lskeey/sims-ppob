@@ -1,20 +1,36 @@
 "use client";
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { formatNumber } from "@/lib/utils";
+import { formatNumber, formatRupiah } from "@/lib/utils";
+import { Service } from "@/services/services/types";
 import { TransactionRequest } from "@/services/transaction/types";
+import { useBalanceStore } from "@/stores/balanceStore";
 import { useServicesStore } from "@/stores/serviceStore";
 import { useTransactionStore } from "@/stores/transaction";
 import Image from "next/image";
-import { useRouter, useSearchParams } from "next/navigation";
-import { FormEvent, useCallback, useEffect, useState } from "react";
-import { ClipLoader } from "react-spinners";
+import { useSearchParams } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
+import { IoMdWallet } from "react-icons/io";
+import { SyncLoader } from "react-spinners";
+import { toast } from "sonner";
 
 export default function PaymentForm() {
-  const router = useRouter();
   const searchParams = useSearchParams();
+
+  const { balance, fetchBalance } = useBalanceStore();
 
   const {
     services,
@@ -22,6 +38,7 @@ export default function PaymentForm() {
     loading: servicesLoading,
     error: servicesError,
   } = useServicesStore();
+
   const {
     makeTransaction,
     loading: transactionLoading,
@@ -29,12 +46,8 @@ export default function PaymentForm() {
   } = useTransactionStore();
 
   const [formError, setFormError] = useState<string | null>(null);
-  const [selectedService, setSelectedService] = useState<{
-    service_name: string;
-    service_tariff: number;
-    service_icon: string;
-    service_code: string;
-  } | null>(null);
+
+  const [selectedService, setSelectedService] = useState<Service | null>(null);
 
   const serviceCodeFromQuery = searchParams.get("service_code") || "";
 
@@ -43,61 +56,60 @@ export default function PaymentForm() {
   }, [fetchServices]);
 
   useEffect(() => {
-    if (services && serviceCodeFromQuery) {
-      const service = services.find(
-        (s) => s.service_code === serviceCodeFromQuery
-      );
-      setSelectedService(service || null);
-      if (!service) {
-        setFormError("Invalid service code.");
-      } else {
-        setFormError(null);
-      }
-    } else if (!serviceCodeFromQuery) {
-      setFormError("Service code not found in URL.");
+    if (!serviceCodeFromQuery) {
       setSelectedService(null);
+      setFormError("Service code not found in URL.");
+      return;
     }
+
+    if (!services) {
+      setSelectedService(null);
+      setFormError("Services not available.");
+      return;
+    }
+
+    const service = services.find(
+      (s) => s.service_code === serviceCodeFromQuery
+    );
+    setSelectedService(service || null);
+    setFormError(service ? null : "Invalid service code.");
   }, [services, serviceCodeFromQuery]);
 
-  const handleSubmit = useCallback(
-    async (e: FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-      setFormError(null);
+  const handleSubmit = useCallback(async () => {
+    setFormError(null);
 
-      if (!selectedService) {
-        setFormError("Invalid service selected. Please try again.");
-        return;
-      }
+    if (!selectedService) {
+      setFormError("Invalid service selected. Please try again.");
+      return;
+    }
 
-      const transactionData: TransactionRequest = {
-        service_code: selectedService.service_code,
-      };
+    const transactionData: TransactionRequest = {
+      service_code: selectedService.service_code,
+    };
 
-      try {
-        await makeTransaction(transactionData);
-      } catch (err) {
-        let errorMessage = "An unexpected error occurred. Please try again.";
-        if (err instanceof Error) {
-          errorMessage = err.message;
-        }
-
-        if (errorMessage.includes("401")) {
-          setFormError("Unauthorized access. Please log in again.");
-          router.push("/auth/login");
-        } else {
-          setFormError(errorMessage);
-        }
-      }
-    },
-    [makeTransaction, router, selectedService]
-  );
+    try {
+      await makeTransaction(transactionData);
+      fetchBalance();
+      toast("Payment successful.", {
+        style: {
+          backgroundColor: "#00bc7d",
+          color: "#fff",
+        },
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  }, [makeTransaction, selectedService]);
 
   const currentError = servicesError || transactionError || formError;
 
   if (servicesLoading) {
     return (
-      <div className="flex justify-center items-center h-screen">
-        <ClipLoader size={32} color="#ef4444" aria-label="Loading Services" />
+      <div
+        className="flex justify-center items-center"
+        style={{ height: "calc(100vh - 28rem)" }}
+      >
+        <SyncLoader size={16} color="#ef4444" aria-label="Loading Services" />
       </div>
     );
   }
@@ -139,7 +151,7 @@ export default function PaymentForm() {
         </div>
       </div>
       <div className="">
-        <form className="w-full" onSubmit={handleSubmit}>
+        <form className="w-full">
           <div className="flex flex-col gap-4">
             <div>
               <Label htmlFor="payment_amount">Payment Amount</Label>
@@ -151,17 +163,48 @@ export default function PaymentForm() {
                 disabled
               />
             </div>
-            <Button
-              type="submit"
-              className="w-full rounded-sm bg-red-500 hover:bg-red-600 cursor-pointer"
-              disabled={transactionLoading}
-            >
-              {transactionLoading ? (
-                <ClipLoader size={16} color="#fff" />
-              ) : (
-                "Pay"
-              )}
-            </Button>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                {balance && (
+                  <Button
+                    className="w-full rounded-sm bg-red-500 hover:bg-red-600 cursor-pointer"
+                    disabled={selectedService.service_tariff > balance}
+                  >
+                    Pay
+                  </Button>
+                )}
+              </AlertDialogTrigger>
+              <AlertDialogContent className="w-sm space-y-6">
+                <AlertDialogHeader>
+                  <div className="w-min self-center p-3 bg-red-500 rounded-full mb-4">
+                    <IoMdWallet className="self-center size-8 text-background" />
+                  </div>
+                  <AlertDialogTitle className="text-center">
+                    Confirm Payment
+                    <AlertDialogDescription className="text-center">
+                      You are about to pay{" "}
+                      <span className="text-red-500">
+                        {formatRupiah(selectedService.service_tariff)}
+                      </span>{" "}
+                      for <span>{selectedService.service_name}</span>
+                    </AlertDialogDescription>
+                  </AlertDialogTitle>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <div className="flex gap-6">
+                    <AlertDialogCancel className="flex-1 cursor-pointer">
+                      Cancel
+                    </AlertDialogCancel>
+                    <AlertDialogAction
+                      className="flex-1 bg-red-500 hover:bg-red-600 cursor-pointer"
+                      onClick={handleSubmit}
+                    >
+                      Confirm
+                    </AlertDialogAction>
+                  </div>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
         </form>
       </div>
