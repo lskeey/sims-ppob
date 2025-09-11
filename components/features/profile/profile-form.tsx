@@ -236,15 +236,17 @@ export default function ProfileForm() {
               </AlertDialogTrigger>
               <AlertDialogContent className="w-sm space-y-6">
                 <AlertDialogHeader>
-                  <IoIosWarning className="self-center size-24 text-yellow-500" />
-                  <AlertDialogTitle>Are You Sure?</AlertDialogTitle>
-                  <AlertDialogDescription>
+                  <IoIosWarning className="self-center size-24 text-yellow-500 mb-4" />
+                  <AlertDialogTitle className="text-center">
+                    Are You Sure?
+                  </AlertDialogTitle>
+                  <AlertDialogDescription className="text-center">
                     This action will apply permanent changes that can't be
                     undone.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                  <div className="flex gap-6">
+                  <div className="w-full flex gap-6">
                     <AlertDialogCancel className="flex-1 cursor-pointer">
                       Cancel
                     </AlertDialogCancel>
