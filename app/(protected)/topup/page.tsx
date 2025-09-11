@@ -7,7 +7,7 @@ export default function TopUp() {
   return (
     <>
       <DashboardHeader />
-      <TopUpForm onSubmit={(amount) => console.log(`Top up: ${amount}`)} />
+      <TopUpForm />
     </>
   );
 }
