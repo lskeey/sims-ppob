@@ -1,36 +1,116 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<div align="center">
+  <h1>SIMS PPOB</h1>
+  <p>Seamless Online Payments and Top-Ups</p>
 
-## Getting Started
+  <p>
+    <img src="https://img.shields.io/github/last-commit/lskeey/sims-ppob?style=flat-square&color=black" alt="Last Commit">
+    <img src="https://img.shields.io/badge/typescript-95%25-blue?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript Percentage">
+    <img src="https://img.shields.io/github/languages/count/lskeey/sims-ppob?style=flat-square&color=black" alt="Languages Count">
+  </p>
 
-First, run the development server:
+  <p align="center">
+    <img src="./public/images/screenshot/home-page.png" alt="Home Page" />
+  </p>
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+  <p>Built with the following tools and technologies:</p>
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+  <p>
+    <img src="https://img.shields.io/badge/next.js-black?style=flat-square&logo=next.js&logoColor=white" alt="Next.js">
+    <img src="https://img.shields.io/badge/react-61DAFB?style=flat-square&logo=react&logoColor=black" alt="React">
+    <img src="https://img.shields.io/badge/typescript-3178C6?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript">
+    <img src="https://img.shields.io/badge/tailwind%20css-38B2AC?style=flat-square&logo=tailwind-css&logoColor=white" alt="Tailwind CSS">
+    <img src="https://img.shields.io/badge/zustand-black?style=flat-square" alt="Zustand">
+    <img src="https://img.shields.io/badge/zod-3E67A3?style=flat-square&logo=zod&logoColor=white" alt="Zod">
+    <img src="https://img.shields.io/badge/eslint-4B32C3?style=flat-square&logo=eslint&logoColor=white" alt="ESLint">
+    <img src="https://img.shields.io/badge/postcss-black?style=flat-square&logo=postcss&logoColor=white" alt="PostCSS">
+    <img src="https://img.shields.io/badge/npm-E32230?style=flat-square&logo=npm&logoColor=white" alt="NPM">
+    <img src="https://img.shields.io/badge/json-white?style=flat-square&logo=json&logoColor=black" alt="JSON">
+    <img src="https://img.shields.io/badge/markdown-black?style=flat-square&logo=markdown&logoColor=white" alt="Markdown">
+  </p>
+</div>
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+This project is a modern web application designed to streamline online bill payments and top-up services. Built with Next.js and TypeScript, this application offers a seamless and responsive user experience, with a strong focus on security and ease of use.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Key Features ✨
 
-## Learn More
+- **User Authentication:** Secure registration and login system using token-based authentication.
+- **Balance Top-Up:** Users can easily add funds to their account balance with various denominations.
+- **Bill Payments:** Pay for a variety of digital services quickly and conveniently.
+- **Profile Management:** Users can view and update their profile information, including their name and profile picture.
+- **Transaction History:** Access a comprehensive list of all past transactions.
+- **Balance Display:** User balance is clearly displayed, with an option to hide or show it for privacy.
+- **Responsive Design:** A user-friendly interface that is accessible across various devices, including desktop and mobile.
 
-To learn more about Next.js, take a look at the following resources:
+## Tech Stack 💻
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Framework:** [Next.js](https://nextjs.org/)
+- **Language:** [TypeScript](https://www.typescriptlang.org/)
+- **Styling:** [Tailwind CSS](https://tailwindcss.com/)
+- **State Management:** [Zustand](https://zustand-demo.pmnd.rs/)
+- **Schema Validation:** [Zod](https://zod.dev/)
+- **UI Components:** [shadcn/ui](https://ui.shadcn.com/)
+- **HTTP Client:** Fetch API
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Getting Started 🚀
 
-## Deploy on Vercel
+To run this project locally, follow these steps:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1.  **Clone the repository:**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+    ```bash
+    git clone https://github.com/lskeey/sims-ppob.git
+    ```
+
+2.  **Install dependencies:**
+
+    ```bash
+    npm install
+    ```
+
+3.  **Run the development server:**
+
+    ```bash
+    npm run dev
+    ```
+
+4.  Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+## Project Structure 📂
+
+<pre>
+lskeey/sims-ppob/
+├── app/                      # Routing, layouts, and pages
+│   ├── (protected)/          # Authentication-protected routes
+│   ├── auth/                 # Authentication pages (login, register)
+│   ├── favicon.ico
+│   ├── globals.css
+│   ├── layout.tsx
+│   └── page.tsx
+├── components/               # React components
+│   ├── auth/                 # Authentication-related components
+│   ├── features/             # Feature-specific components
+│   ├── layout/               # Layout components (header, dashboard)
+│   ├── ui/                   # General UI components (Button, Card, etc.)
+│   └── nav-menu.tsx
+├── lib/                      # Utility functions
+│   └── utils.ts
+├── public/                   # Static assets (images, icons)
+├── schemas/                  # Zod validation schemas
+│   └── index.ts
+├── services/                 # Logic for interacting with the API
+│   ├── auth/
+│   ├── profile/
+│   ├── promo/
+│   ├── services/
+│   ├── topup/
+│   ├── transaction/
+│   └── utils/
+├── stores/                   # State management with Zustand
+├── types/                    # TypeScript type definitions
+├── .gitignore
+├── middleware.ts             # Middleware for route authentication
+├── next.config.ts
+├── package.json
+├── README.md
+└── tsconfig.json
+</pre>
