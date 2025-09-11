@@ -11,6 +11,7 @@ import { ClipLoader } from "react-spinners";
 import z from "zod";
 import { Alert, AlertDescription } from "../ui/alert";
 import { useAuthStore } from "@/stores/authStore";
+import { IoMdWallet } from "react-icons/io";
 
 export function RegisterForm() {
   const router = useRouter();
@@ -84,7 +85,7 @@ export function RegisterForm() {
       <div className="flex flex-col gap-6">
         <div className="flex items-center justify-center gap-2">
           <div className="w-fit p-1.5 bg-red-500 rounded-full">
-            <Wallet size={18} color="white" />
+            <IoMdWallet size={18} color="white" />
           </div>
           <span className="font-medium text-xl">SIMS PPOB</span>
         </div>

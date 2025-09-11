@@ -10,6 +10,7 @@ import {
 } from "../ui/sheet";
 import { Button } from "../ui/button";
 import Link from "next/link";
+import { IoMdWallet } from "react-icons/io";
 
 export default function Header() {
   return (
@@ -20,7 +21,7 @@ export default function Header() {
           className="w-auto flex-none flex items-center gap-1.5 select-none cursor-pointer"
         >
           <div className="w-auto p-1.5 bg-red-500 rounded-full">
-            <Wallet size={16} color="white" />
+            <IoMdWallet size={16} color="white" />
           </div>
           <span className="shrink-0 font-medium">SIMS PPOB</span>
         </Link>
