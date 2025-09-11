@@ -9,6 +9,7 @@ interface BalanceState {
   loading: boolean;
   error: string | null;
   fetchBalance: () => Promise<APIResponse<BalanceResponse>>;
+  setBalance: (balance: number) => void;
 }
 
 export const useBalanceStore = create<BalanceState>((set) => ({
@@ -37,4 +38,5 @@ export const useBalanceStore = create<BalanceState>((set) => ({
       set({ loading: false });
     }
   },
+  setBalance: (newBalance) => set({ balance: newBalance }),
 }));

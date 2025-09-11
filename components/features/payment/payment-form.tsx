@@ -30,7 +30,7 @@ import { toast } from "sonner";
 export default function PaymentForm() {
   const searchParams = useSearchParams();
 
-  const { balance, fetchBalance } = useBalanceStore();
+  const { balance, setBalance } = useBalanceStore();
 
   const {
     services,
@@ -78,8 +78,8 @@ export default function PaymentForm() {
   const handleSubmit = useCallback(async () => {
     setFormError(null);
 
-    if (!selectedService) {
-      setFormError("Invalid service selected. Please try again.");
+    if (!selectedService || balance === null) {
+      setFormError("Service or balance is not available. Please try again.");
       return;
     }
 
@@ -89,7 +89,8 @@ export default function PaymentForm() {
 
     try {
       await makeTransaction(transactionData);
-      fetchBalance();
+      const newBalance = balance - selectedService.service_tariff;
+      setBalance(newBalance);
       toast("Payment successful.", {
         style: {
           backgroundColor: "#00bc7d",

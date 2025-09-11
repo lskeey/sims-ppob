@@ -23,7 +23,7 @@ import { useBalanceStore } from "@/stores/balanceStore";
 
 export default function TopUpForm() {
   const { topup } = useTopupStore();
-  const { fetchBalance } = useBalanceStore();
+  const { setBalance } = useBalanceStore();
   const amounts = [10000, 20000, 50000, 100000, 250000, 500000];
   const [topUpAmount, setTopUpAmount] = useState<string>("");
   const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
@@ -50,8 +50,8 @@ export default function TopUpForm() {
     const amount = parseInt(topUpAmount, 10);
 
     try {
-      await topup({ top_up_amount: amount });
-      fetchBalance();
+      const response = await topup({ top_up_amount: amount });
+      setBalance(response.data.balance);
       toast("Top-up successful.", {
         style: {
           backgroundColor: "#00bc7d",
